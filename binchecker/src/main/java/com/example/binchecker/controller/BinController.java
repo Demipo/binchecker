@@ -8,6 +8,7 @@ import com.example.binchecker.service.BinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,9 +34,10 @@ public class BinController {
     }
 
     @RequestMapping(path = "/admin", method =  RequestMethod.GET)
-    public ResponseEntity<?> getBinDetails(){
+//    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getBinsDetails(){
         ApiResponseAdmin< Map<String, Integer>> ar = new ApiResponseAdmin<>();
-        Map<String, Integer> br = service.getBinDetails();
+        Map<String, Integer> br = service.getBinsDetails();
         ar.setPayload(br);
         ar.setSuccess(true);
         ar.setSize(br.size());
