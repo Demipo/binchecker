@@ -15,7 +15,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("admin")
                 .password("auth")
                 .roles("ADMIN");
-    }z
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
