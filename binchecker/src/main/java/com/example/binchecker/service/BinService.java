@@ -2,6 +2,7 @@ package com.example.binchecker.service;
 
 import com.example.binchecker.dto.BinDetailedResponse;
 import com.example.binchecker.dto.BinResponse;
+import com.example.binchecker.exception.ResourceNotFoundException;
 import com.example.binchecker.model.Bin;
 import com.example.binchecker.repository.BinRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -19,14 +21,17 @@ public class BinService {
     @Autowired
     private BinRepository repository;
 
-    public BinResponse postBin(String bin) {
+    public BinResponse postBin(String bin) throws Exception {
+        ResponseEntity<BinDetailedResponse> re;
         String sixDigitBin = bin.substring(0,6);
 
         Map<String, String> uriVariable = new HashMap<>();
         uriVariable.put("bin", bin);
-        ResponseEntity<BinDetailedResponse> re = new RestTemplate().getForEntity("https://lookup.binlist.net/{bin}",
-                BinDetailedResponse.class, uriVariable);
-
+        try{
+            re = new RestTemplate().getForEntity("https://lookup.binlist.net/{bin}", BinDetailedResponse.class, uriVariable);
+        }catch(Exception ex){
+            throw new ResourceNotFoundException("Invalid BIN/IIN");
+        }
         if(re.getStatusCode().is2xxSuccessful()){
             Bin b = repository.findByBin(sixDigitBin);
             if(b != null){
@@ -49,5 +54,9 @@ public class BinService {
         br.setType(re.getBody().getType());
 
         return br;
+    }
+
+    public List<Bin> getBinDetails() {
+        return repository.findAll();
     }
 }
