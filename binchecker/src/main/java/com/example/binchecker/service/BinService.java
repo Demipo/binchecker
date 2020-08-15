@@ -56,7 +56,12 @@ public class BinService {
         return br;
     }
 
-    public List<Bin> getBinDetails() {
-        return repository.findAll();
+    public Map<String, Integer> getBinDetails() {
+        List<Bin> binList = repository.findAll();
+        Map<String, Integer> payload = new HashMap<>();
+        for(Bin bin : binList){
+            payload.put(bin.getBin(), bin.getCheckCounter());
+        }
+        return payload;
     }
 }
