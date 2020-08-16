@@ -32,7 +32,6 @@ public class BinService {
         }catch(Exception ex){
             throw new ResourceNotFoundException("Invalid BIN/IIN");
         }
-        if(re.getStatusCode().is2xxSuccessful()){
             Bin b = repository.findByBin(sixDigitBin);
             if(b != null){
                 b.setCheckCounter(b.getCheckCounter() + 1);
@@ -45,7 +44,6 @@ public class BinService {
                 newBin.setBin(sixDigitBin);
                 newBin.setTime(ZonedDateTime.now());
                 repository.save(newBin);
-            }
         }
 
         BinResponse br = new BinResponse();
