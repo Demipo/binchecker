@@ -26,9 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = com.example.binchecker.controller.BinController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
-        WebSecurityConfigurer.class, Filter.class }), excludeAutoConfiguration = SecurityAutoConfiguration.class)
-@ActiveProfiles("test")
+@WebMvcTest(controllers = com.example.binchecker.controller.BinController.class)
 public class BinControllerTest {
 
     @Autowired
@@ -72,7 +70,7 @@ public class BinControllerTest {
         when(binService.getBinsDetails()).thenReturn(payload);
         String payloadString = mapper.writeValueAsString(payload);
         this.mvc
-                .perform((get("/bin/admin"))
+                .perform((get("/bin/admin/bins-details"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payloadString))
                 .andExpect((jsonPath("$.payload.539923", is(2))))
