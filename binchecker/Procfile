@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -jar target/binchecker-1.0.0v.jar -Dserver.port=$PORT $JAR_OPTS

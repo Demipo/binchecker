@@ -15,13 +15,18 @@ import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/bin")
 public class BinController {
 
     @Autowired
     private BinService service;
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<?> home(){
+        String msg = "Welcome to BinChecker";
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/bin", method = RequestMethod.POST)
     public ResponseEntity<ApiResponse<BinResponse>> postBin(@Valid @RequestBody BinRequest request) throws Exception {
         ApiResponse<BinResponse> ar = new ApiResponse<BinResponse>();
         BinResponse br = service.postBin(request.getBin());
@@ -30,8 +35,7 @@ public class BinController {
         return new ResponseEntity<>(ar, HttpStatus.CREATED);
     }
 
-    @RequestMapping(path = "/admin/bins-details", method =  RequestMethod.GET)
-//    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(path = "bin/admin/bins-details", method =  RequestMethod.GET)
     public ResponseEntity<?> getBinsDetails(){
         ApiResponseAdmin< Map<String, Integer>> ar = new ApiResponseAdmin<>();
         Map<String, Integer> br = service.getBinsDetails();
